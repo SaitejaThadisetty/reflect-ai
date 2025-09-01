@@ -2,13 +2,12 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
-import { toast } from 'sonner'; // Updated import, no more useToast hook
+import { toast } from 'sonner';
 import { Bot, Loader2 } from 'lucide-react';
 
 export default function JournalForm({ onEntryCreated }) {
   const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  // The useToast hook is removed
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,19 +24,16 @@ export default function JournalForm({ onEntryCreated }) {
     if (res.ok) {
       setContent('');
       onEntryCreated();
-      // Updated success toast call
       toast.success("Entry Saved", {
         description: "Your thoughts have been analyzed and recorded.",
       });
     } else {
-      // Updated error toast call
       toast.error("Uh oh! Something went wrong.", {
         description: "There was a problem saving your entry.",
       });
     }
   };
 
-  // The returned JSX for the form remains exactly the same
   return (
     <Card className="bg-zinc-900/30 border-zinc-800 backdrop-blur-xl">
       <CardContent className="pt-6">

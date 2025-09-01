@@ -9,29 +9,24 @@ import { ArrowRight } from 'lucide-react';
 export default function Home() {
   const [entries, setEntries] = useState([]);
 
-  // This function is now safer and handles errors
   const fetchEntries = async () => {
     try {
       const res = await fetch('/api/journal');
       if (!res.ok) {
-        // This will catch the 500 error from the API
         console.error("API call failed with status:", res.status);
-        setEntries([]); // Clear entries on error
+        setEntries([]);
         return;
       }
-
       const responseData = await res.json();
-
-      // Check if the data is an array before trying to map it
       if (Array.isArray(responseData)) {
         setEntries(responseData);
       } else {
         console.error("API did not return an array:", responseData);
-        setEntries([]); // Clear entries if data is not an array
+        setEntries([]);
       }
     } catch (error) {
       console.error("Error fetching entries:", error);
-      setEntries([]); // Clear entries on network error
+      setEntries([]);
     }
   };
 

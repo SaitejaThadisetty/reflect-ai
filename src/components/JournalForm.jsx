@@ -1,9 +1,11 @@
+// src/components/JournalForm.jsx
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { Bot, Loader2 } from 'lucide-react';
+import { RichTextEditor } from './RichTextEditor';
 
 export default function JournalForm({ onEntryCreated }) {
   const [content, setContent] = useState('');
@@ -38,16 +40,13 @@ export default function JournalForm({ onEntryCreated }) {
     <Card className="bg-zinc-900/30 border-zinc-800 backdrop-blur-xl">
       <CardContent className="pt-6">
         <form onSubmit={handleSubmit}>
-          <Textarea
-            className="h-32 bg-zinc-900/50 text-zinc-200 border-zinc-700 focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:ring-violet-500"
-            placeholder="Tell me what's on your mind..."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            disabled={isLoading}
+          <RichTextEditor 
+            content={content} 
+            onUpdate={setContent}
           />
           <Button
             type="submit"
-            disabled={isLoading || !content}
+            disabled={isLoading || content === '<p></p>' || !content}
             className="w-full mt-4 bg-violet-600 text-white hover:bg-violet-700 disabled:bg-zinc-700 disabled:text-zinc-400"
           >
             {isLoading ? (

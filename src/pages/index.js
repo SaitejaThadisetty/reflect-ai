@@ -1,15 +1,25 @@
+// src/pages/index.js
+
 import { useState, useEffect } from 'react';
-import JournalForm from '../components/JournalForm';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from 'lucide-react';
+import DOMPurify from 'dompurify';
+
+// Dynamically import the form to disable Server-Side Rendering for the editor
+const JournalForm = dynamic(
+  () => import('../components/JournalForm'),
+  { ssr: false }
+);
 
 export default function Home() {
   const [entries, setEntries] = useState([]);
 
   const fetchEntries = async () => {
+    // ... (fetchEntries function remains the same as before)
     try {
       const res = await fetch('/api/journal');
       if (!res.ok) {
@@ -68,7 +78,11 @@ export default function Home() {
                     <CardDescription className="text-zinc-400">{new Date(entry.createdAt).toLocaleString()}</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-zinc-300 whitespace-pre-wrap">{entry.content}</p>
+                    {/* Safely render the sanitized HTML content */}
+                    <div 
+                      className="prose prose-invert max-w-none"
+                      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(entry.content) }} 
+                    />
                   </CardContent>
                 </Card>
               </motion.div>
